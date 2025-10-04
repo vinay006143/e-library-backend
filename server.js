@@ -22,10 +22,12 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: "https://e-library-pro.vercel.app/", // your frontend URL
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["https://e-library-pro.vercel.app"], // ✅ removed trailing slash
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve uploads folder statically
+// Serve uploads folder statically (optional, if you use multer for profile images/books)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
@@ -46,11 +48,11 @@ app.use("/api/categories", categoryRoutes);
 
 // Test endpoint
 app.get("/", (req, res) => {
-  res.send("✅ eLibrary API is running!");
+  res.send("✅ eLibrary API is running on Render!");
 });
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
